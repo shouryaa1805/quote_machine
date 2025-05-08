@@ -1,0 +1,32 @@
+// Global variables to store the quote and author
+let quote = "";
+let author = "";
+
+// Function to fetch a random quote from the API
+const fetchQuote = async () => {
+  try {
+    const response = await fetch('https://api.quotable.io/random');
+    const data = await response.json();
+    quote = data.content;
+    author = data.author;
+
+    // Update the DOM with the fetched quote and author
+    document.getElementById("quote").innerText = `“${quote}”`;
+    document.getElementById("author").innerText = `- ${author}`;
+  } catch (error) {
+    console.error('Error fetching quote:', error);
+  }
+};
+
+// Function to tweet the current quote
+const tweetQuote = () => {
+  const tweet = `“${quote}” — ${author}`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`, '_blank');
+};
+
+// Add event listeners for the buttons
+document.getElementById("new-quote").addEventListener("click", fetchQuote);
+document.getElementById("tweet-quote").addEventListener("click", tweetQuote);
+
+// Fetch the initial quote when the page loads
+fetchQuote();
